@@ -1,6 +1,6 @@
 ## 1. Subtração entre dois números
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio1 {
@@ -49,7 +49,7 @@ public class Exercicio2 {
 
 ## 3. Média aritmética de três notas
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio3 {
@@ -77,7 +77,7 @@ public class Exercicio3 {
 
 ## 4. Produto com desconto de 10%
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio4 {
@@ -99,7 +99,7 @@ public class Exercicio4 {
 
 ## 5. Salário com gratificação e imposto
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio5 {
@@ -123,7 +123,7 @@ public class Exercicio5 {
 
 ## 6. Salário com comissão
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio6 {
@@ -149,7 +149,7 @@ public class Exercicio6 {
 
 ## 7. Média ponderada
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio7 {
@@ -192,7 +192,7 @@ Fórmula:
 
 A= base×altura / 2
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio8 {
@@ -218,7 +218,7 @@ public class Exercicio8 {
 
 A=lado2
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio9 {
@@ -239,7 +239,7 @@ public class Exercicio9 {
 
 ## 10. Conversão de medidas
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio10 {
@@ -265,7 +265,7 @@ public class Exercicio10 {
 
 ## 11. Idade em anos, meses, dias e semanas
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio11 {
@@ -296,7 +296,7 @@ public class Exercicio11 {
 
 ## 12. Custo final de um carro
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio12 {
@@ -329,7 +329,7 @@ public class Exercicio12 {
 
 ## 13. Salário baseado em horas trabalhadas
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio13 {
@@ -357,7 +357,7 @@ public class Exercicio13 {
 
 ## 14. Valor do quilowatt
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio14 {
@@ -387,7 +387,7 @@ public class Exercicio14 {
 
 ## 15. Celsius para Fahrenheit
 
-```
+```java
 import java.util.Scanner;
 
 public class Exercicio15 {
