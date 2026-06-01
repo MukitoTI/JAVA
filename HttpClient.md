@@ -117,4 +117,107 @@ Authenticator auth = new Authenticator() {
 HttpClient.newBuilder().authenticator(auth).build();
 ```
 
+### 12) Proxy
+ * Configure ProxySelector (global ou por cliente):
+```java
+HttpClient.newBuilder()
+    .proxy(ProxySelector.of(new InetSocketAddress("proxy.example.com", 3128)))
+    .build();
+```
+ * Proxy authentication via Authenticator.
+
+### 13) Cookies
+ * HttpClient não armazena cookies por padrão; forneça CookieHandler (CookieManager) ao builder:
+
+```java
+CookieManager cm = new CookieManager();
+cm.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+HttpClient.newBuilder().cookieHandler(cm).build();
+
+```
+
+### 14) WebSocket
+ * API WebSocket integrada (java.net.http.WebSocket) com modelo assíncrono e listener:
+
+```java
+CompletableFuture<WebSocket> wsFuture = client.newWebSocketBuilder()
+    .buildAsync(URI.create("wss://example.com/ws"), listener);
+```
+
+### 15) Interceptores / filtros
+ * Não existe interceptor nativo como OkHttp. Padrões:
+   * Construir wrapper em torno de send/sendAsync para aplicar lógica (retry, logging).
+   * Usar Executor customizado e factory de requests.
+   * Para instrumentação, envolver BodyHandlers/Publishers.
+
+
+### 16) Retries e backoff
+ * Implemente em camadas: wrapper que reenvia em falhas transitórias (IOExceptions, 5xx, 429) com backoff exponencial e jitter; respeite headers Retry-After quando presentes.
+
+### 17) Tratamento de erros e códigos HTTP
+ * client.send lança IOException/InterruptedException; validar statusCode via response.statusCode().
+ * Use BodyHandlers.ofString() para ler corpo de erro.
+ * Trate especificidades: 401/403 (auth), 429/503 (retry-after), 3xx (redirecionamento).
+
+### 18) Performance e pooling
+ * HttpClient gerencia conexões internamente e reaproveita conexões HTTP/1.1 keep-alive e HTTP/2 multiplexadas.
+ * Reaproveite instâncias de HttpClient.
+ * Ajuste Executor para controlar threads de callbacks.
+ * Para alto throughput, prefira HTTP/2 onde possível e limite concorrência por host externamente.
+### 19) Monitoramento e métricas
+ * Não há métricas embutidas; adicione wrappers para:
+  * Latência por request (System.nanoTime).
+  * Contadores de sucesso/falha.
+  * Tamanho de payloads.
+  * Integre com micrometer/Prometheus via instrumentação manual.
+### 20) Comparativo rápido (quando escolher qual)
+ * HttpURLConnection: use apenas se precisar de compatibilidade com JDK <11; API antiga e limitada.
+ * java.net.http.HttpClient: escolha padrão para Java 11+ — integração JDK, HTTP/2, async.
+ * OkHttp: se precisar de interceptors fáceis, multipart simples, ótima performance em mobile/Android.
+ * Apache HttpClient: se precisar de recursos corporativos avançados e compatibilidade com ecossistemas antigos. Tabela resumida (breve):
+ * Simplicidade/Disponibilidade: HttpClient (JDK11+)
+ * HTTP/2 & WebSocket: HttpClient, OkHttp
+ * Interceptors & Multipart fáceis: OkHttp, Apache
+ * Alto controle e customização: Apache
+
+### 21) Exemplos práticos (concisos)
+GET sync:
+```java
+HttpRequest r = HttpRequest.newBuilder(URI.create("https://httpbin.org/get")).GET().build();
+HttpResponse<String> s = client.send(r, BodyHandlers.ofString());
+```
+POST JSON async:
+```java
+HttpRequest r = HttpRequest.newBuilder(URI.create("https://api.example.com"))
+    .POST(BodyPublishers.ofString("{\"name\":\"x\"}", StandardCharsets.UTF_8))
+    .header("Content-Type","application/json")
+    .build();
+client.sendAsync(r, BodyHandlers.ofString())
+      .thenApply(HttpResponse::body)
+      .thenAccept(System.out::println);
+```
+
+Download grande streaming:
+```java
+HttpRequest r = HttpRequest.newBuilder(URI.create(url)).GET().build();
+client.send(r, BodyHandlers.ofFile(Paths.get("out.bin")));
+```
+Retry simples com CompletableFuture (exponencial): implementar wrapper que chama sendAsync e em caso de falha re-chama com delay via ScheduledExecutorService.
+
+### 22) Boas práticas resumidas
+ * Reutilize HttpClient.
+ * Defina timeouts (connect + per-request).
+ * Use BodyHandlers.ofFile/ofInputStream para payloads grandes.
+ * Use CookieManager se precisar manter cookies.
+ * Não confie em autoverificação de redirecionamento para preservar headers sensíveis.
+ * Implementar retries com backoff e respeitar Retry-After.
+ * Instrumente latências e taxas de erro.
+ * Para multipart/complex uploads, prefira bibliotecas prontas se não quiser construir boundary manualmente.
+
+
+
+
+
+
+
 
