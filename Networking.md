@@ -1,4 +1,6 @@
-# Networking
+# HttpURLConnection
+
+## Networking
 
 ### HttpURLConnection
   * É a API HTTP nativa de **Java** (desde JDK1.1) para abrir conexões HTTP/HTTPS. faz parte de java.net
